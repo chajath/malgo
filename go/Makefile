@@ -1,4 +1,4 @@
-export GOPATH := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+# export GOPATH := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 #####################
 
@@ -25,8 +25,8 @@ mal: $(word $(words $(BINS)),$(BINS))
 	cp $< $@
 
 define dep_template
-$(1): $(SOURCES_BASE) src/$(1)/$(1).go
-	go build $$@
+$(1): src/$(1)/$(1).go
+	cd src; go build -o ../mal/$(1) $(1)/$(1).go
 endef
 
 $(foreach b,$(BINS),$(eval $(call dep_template,$(b))))

@@ -2,19 +2,48 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
+
+	"github.com/chajath/malgo/go/readline"
 )
 
-func main() {
-	scanner := bufio.NewScanner(os.Stdin)
+var rl bool
 
-	// Main REPL loop.
+func main() {
+	flag.BoolVar(&rl, "rl", false, "Use readline")
+	flag.Parse()
+	if rl {
+		mainRl()
+		return
+	}
+
+	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Print("user> ")
 	for scanner.Scan() {
-		repOut := rep(scanner.Text())
+		in := scanner.Text()
+		repOut := rep(in)
 		fmt.Println(repOut)
 		fmt.Print("user> ")
+	}
+}
+
+func mainRl() {
+	rl, err := readline.NewReadline("user> ")
+	if err != nil {
+		return
+	}
+
+	defer rl.Close()
+
+	for {
+		in, err := rl.Read()
+		if err != nil {
+			break
+		}
+		repOut := rep(in)
+		fmt.Println(repOut)
 	}
 }
 
