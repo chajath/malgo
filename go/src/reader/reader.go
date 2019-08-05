@@ -8,11 +8,6 @@ import (
 	"github.com/chajath/malgo/go/types"
 )
 
-type Reader interface {
-	Next() string
-	Peek() (string, error)
-}
-
 type reader struct {
 	tokens []string
 	pos    int
@@ -22,7 +17,7 @@ var re = regexp.MustCompile(`[\s,]*(~@|[\[\]{}()'` + "`" +
 	`~^@]|"(?:\\.|[^\\"])*"?|;.*|[^\s\[\]{}('"` + "`" +
 	`,;)]*)`)
 
-func newReader(str string) Reader {
+func newReader(str string) *reader {
 	tokens := tokenize(str)
 	return &reader{tokens: tokens, pos: 0}
 }
@@ -45,7 +40,7 @@ func ReadStr(str string) (types.MalType, error) {
 	return readForm(r)
 }
 
-func readForm(r Reader) (types.MalType, error) {
+func readForm(r *reader) (types.MalType, error) {
 	p, err := r.Peek()
 	if err != nil {
 		return nil, err
@@ -56,7 +51,7 @@ func readForm(r Reader) (types.MalType, error) {
 	return readAtom(r)
 }
 
-func readList(r Reader) (*types.MalList, error) {
+func readList(r *reader) (*types.MalList, error) {
 	r.Next()
 	toReturn := make([]types.MalType, 0)
 	for {
@@ -77,7 +72,7 @@ func readList(r Reader) (*types.MalList, error) {
 	return types.NewMalList(toReturn), nil
 }
 
-func readAtom(r Reader) (types.MalType, error) {
+func readAtom(r *reader) (types.MalType, error) {
 	n := r.Next()
 	tryNum, err := strconv.Atoi(n)
 	if err != nil {
