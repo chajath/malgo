@@ -202,7 +202,11 @@ func eval(in types.MalType, cEnv env.MalEnv) (types.MalType, error) {
 		if err != nil {
 			return nil, err
 		}
+
 		evaluator, ok := headValue.(*numEvaluator)
+		if !ok {
+			return nil, fmt.Errorf("eval: head of list is not a built-in evaluator: %+v", headValue)
+		}
 
 		// Call evaluator with the rest of the list.
 		return evaluator.eval(types.NewMalList(l.List[1:]), cEnv)
