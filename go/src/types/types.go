@@ -35,3 +35,27 @@ type MalNumber struct {
 func NewMalNumber(number int) *MalNumber {
 	return &MalNumber{Number: number}
 }
+
+type MalNil struct {
+	MalType
+}
+
+func NewMalNil() *MalNil {
+	return &MalNil{}
+}
+
+type MalTrue struct {
+	MalType
+}
+
+func NewMalTrue() *MalTrue {
+	return &MalTrue{}
+}
+
+type MalFalse struct {
+	MalType
+}
+
+func NewMalFalse() *MalFalse {
+	return &MalFalse{}
+}

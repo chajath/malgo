@@ -76,7 +76,16 @@ func readAtom(r *reader) (types.MalType, error) {
 	n := r.Next()
 	tryNum, err := strconv.Atoi(n)
 	if err != nil {
-		return types.NewMalSymbol(n), nil
+		switch n {
+		case "true":
+			return types.NewMalTrue(), nil
+		case "false":
+			return types.NewMalFalse(), nil
+		case "nil":
+			return types.NewMalNil(), nil
+		default:
+			return types.NewMalSymbol(n), nil
+		}
 	}
 	return types.NewMalNumber(tryNum), nil
 }
