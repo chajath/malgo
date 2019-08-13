@@ -30,6 +30,12 @@ func PrStr(m types.MalType) (string, error) {
 		}
 		sb.WriteString(")")
 		return sb.String(), nil
+	case *types.MalTrue:
+		return "true", nil
+	case *types.MalFalse:
+		return "false", nil
+	case *types.MalNil:
+		return "nil", nil
 	}
 	return "", fmt.Errorf("printer: unknown MalType %+v", m)
 }
